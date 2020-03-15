@@ -4,9 +4,14 @@
 ###
 
 :start
-echo Hello world!
-sleep 10
-goto custom_exit
+imgfree
+echo Boot parameters: ${install_params} -- quiet ${params}
+kernel http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux ${install_params} ${netcfg} ${mirrorcfg} console=ttyS0,115200n8 -- quiet ${params} initrd=initrd.gz
+initrd http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz
+echo
+echo MD5sums:
+md5sum linux initrd.gz
+boot
 
 :custom_exit
 exit 0
