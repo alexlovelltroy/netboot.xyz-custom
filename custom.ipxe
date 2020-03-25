@@ -5,8 +5,9 @@
 
 :start
 imgfree
+set install_params auto=true priority=critical preseed/url=http://192.168.212.2/install/apu4-preseed.txt
 echo Boot parameters: ${install_params} -- quiet ${params}
-kernel http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux auto url=http://192.168.212.2/install/apu4-preseed.txt ${install_params} ${netcfg} ${mirrorcfg} console=ttyS0,115200n8 -- quiet ${params} initrd=initrd.gz
+kernel http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux ${install_params} ${netcfg} ${mirrorcfg} console=ttyS0,115200n8 -- quiet ${params} initrd=initrd.gz
 initrd http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz
 echo
 echo MD5sums:
