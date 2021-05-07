@@ -2,17 +2,43 @@
 ###
 ### netboot.xyz-custom menu
 ###
+:custom
+clear custom_choice
+menu Which Debian do you want?
+item option_one ${space} Buster with Serial Console
+item option_two ${space} Bullseye with Serial Console
+choose custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
+goto custom_exit
 
-:start
+:option_one
+kernel http://path.to/vmlinuz
+initrd http://path.to/initrd
+imgargs vmlinuz put_kernel_img_args_here
+boot || goto custom_exit
+
+:option_two
 imgfree
 set install_params auto=true priority=critical 
 echo Boot parameters: ${install_params} -- quiet ${params}
-kernel http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux auto url=https://raw.githubusercontent.com/alexlovelltroy/netboot.xyz-custom/master/preseed.cfg ${install_params} ${netcfg} ${mirrorcfg} console=ttyS0,115200n8 -- quiet ${params} initrd=initrd.gz
+kernel http://ftp.us.debian.org/debian/dists/bullseye/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux auto url=https://raw.githubusercontent.com/alexlovelltroy/netboot.xyz-custom/master/preseed-bullseye.cfg ${install_params} ${netcfg} ${mirrorcfg} console=ttyS0,115200n8 -- quiet ${params} initrd=initrd.gz
+initrd http://ftp.us.debian.org/debian/dists/bullseye/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz
+echo
+echo MD5sums:
+md5sum linux initrd.gz
+boot || goto custom_exit
+
+:option_one
+imgfree
+set install_params auto=true priority=critical 
+echo Boot parameters: ${install_params} -- quiet ${params}
+kernel http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux auto url=https://raw.githubusercontent.com/alexlovelltroy/netboot.xyz-custom/master/preseed-buster.cfg ${install_params} ${netcfg} ${mirrorcfg} console=ttyS0,115200n8 -- quiet ${params} initrd=initrd.gz
 initrd http://ftp.us.debian.org/debian/dists/buster/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz
 echo
 echo MD5sums:
 md5sum linux initrd.gz
-boot
+boot || goto custom_exit
 
 :custom_exit
 exit 0
